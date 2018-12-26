@@ -1,40 +1,34 @@
 package ru.karimov.test.pages;
 
 import net.thucydides.core.annotations.DefaultUrl;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import net.serenitybdd.core.pages.WebElementFacade;
-import java.util.stream.Collectors;
 
 import net.serenitybdd.core.annotations.findby.FindBy;
 
 import net.thucydides.core.pages.PageObject;
 
-import java.util.List;
-
-@DefaultUrl("https://translate.google.com")
+@DefaultUrl("https://translate.google.com/?hl=ru&tab=TT")
 public class TranslatePage extends PageObject {
 
     @SuppressWarnings("unused")
-    @FindBy(name="text")
+    @FindBy(id="source")
     private WebElementFacade searchTerms;
 
     @SuppressWarnings("unused")
-    @FindBy(id="gt-submit")
-    private WebElementFacade submitButton;
+    @FindBy(xpath="/html/body/div[2]/div[1]/div[2]/div[1]/div[1]/div[2]/div[2]/div[1]/div[2]/div/span[1]/span")
+    private WebElementFacade result;
+
 
     public void enter_keywords(String keyword) {
         searchTerms.type(keyword);
     }
 
     public void lookup_terms() {
-        find(By.id("gt-lang-src")).find(By.id("sugg-item-en")).click();
-        find(By.id("gt-lang-tgt")).find(By.id("sugg-item-ru")).click();
-        submitButton.click();
+        waitFor(result);
     }
 
     public String getTranslations() {
-        return find(By.id("result_box")).find(By.tagName("span")).getText();
+        return result.getText();
     }
 
 }
